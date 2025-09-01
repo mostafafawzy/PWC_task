@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire 'app' directory into the container's working directory
-COPY ./app ./app
+COPY . .
 
 # Expose the port your app will run on
 EXPOSE 5000
