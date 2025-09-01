@@ -16,7 +16,8 @@ COPY . .
 
 # Expose the port your app will run on
 EXPOSE 5000
+ENV PYTHONPATH=/usr/src/app
 
 # Run main.py when the container launches, specifying its full path
 # The CMD command is relative to the WORKDIR
-CMD ["python", "app/main.py"]
+CMD ["python", "-m", "app.main"]
