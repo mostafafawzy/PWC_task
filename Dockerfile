@@ -20,5 +20,4 @@ ENV PYTHONPATH=/usr/src/app
 
 # Run main.py when the container launches, specifying its full path
 # The CMD command is relative to the WORKDIR
-# CMD ["python", "-m", "app.main"]
-CMD ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+CMD ["python", "-m", "app.main"]
