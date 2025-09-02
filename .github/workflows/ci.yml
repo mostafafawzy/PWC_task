@@ -75,7 +75,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install python-app ./helm-chart/python-app \
+          helm upgrade --install python-app ./helm-chart \
             --namespace default \
             --set image.repository=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY \
             --set image.tag=$IMAGE_TAG
