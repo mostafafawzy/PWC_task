@@ -13,6 +13,7 @@ jobs:
     env:
       AWS_REGION: eu-central-1
       ECR_REPOSITORY: my-python-app
+      EKS_CLUSTER_NAME: demo
       # IMAGE_TAG: ${{ github.run_number }}
 
     steps:
@@ -36,13 +37,14 @@ jobs:
         id: vars
         run: echo "IMAGE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
-      # Configure AWS credentials
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials and kubectl
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      - run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
 
       # Login to Amazon ECR
       - name: Login to Amazon ECR
@@ -55,3 +57,25 @@ jobs:
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
           docker tag $ECR_REPOSITORY:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # - name: Configure kubectl
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-region: ${{ env.AWS_REGION }}
+      #     role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
+
+      - name: Checkout Helm chart repo
+        uses: actions/checkout@v3
+        with:
+          repository: mostafafawzy/PWC_task_Helm
+          path: helm-chart
+
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install python-app ./helm-chart/python-app \
+            --namespace default \
+            --set image.repository=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY \
+            --set image.tag=$IMAGE_TAG
