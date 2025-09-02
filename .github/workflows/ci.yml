@@ -13,7 +13,7 @@ jobs:
     env:
       AWS_REGION: eu-central-1
       ECR_REPOSITORY: my-python-app
-      IMAGE_TAG: ${{ github.run_number }}
+      # IMAGE_TAG: ${{ github.run_number }}
 
     steps:
       # Checkout repository
@@ -32,6 +32,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Set IMAGE_TAG with timestamp
+        id: vars
+        run: echo "IMAGE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       # Configure AWS credentials
       - name: Configure AWS credentials
