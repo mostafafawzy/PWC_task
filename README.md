@@ -87,7 +87,7 @@ Routes /products → /products
 
 The ingress will use the ELB DNS name provided by the NGINX ingress controller.
 
-Step 9: Deploy Application with Helm
+Step 8: Deploy Application with Helm
 
 Deployed the application into the EKS cluster with:
 
@@ -96,7 +96,7 @@ helm upgrade --install python-app ./helm-chart \
   --set image.repository=<your_ecr_repo_url> \
   --set image.tag=<timestamp_tag>
 
-Step 8: Install NGINX Ingress Controller
+Step 9: Install NGINX Ingress Controller
 
 Install the NGINX ingress controller into the EKS cluster (creates an AWS LoadBalancer automatically):
 
@@ -107,7 +107,7 @@ helm install nginx-ingress ingress-nginx/ingress-nginx \
 
 This will provision an AWS ELB and map all ingress resources inside the cluster to the ELB’s DNS name.
 
-📊 Step 11: Install Prometheus & Grafana for Cluster Monitoring
+📊 Step 10: Install Prometheus & Grafana for Cluster Monitoring
 
 To monitor the EKS cluster and workloads, installed Prometheus and Grafana using Helm.
 
