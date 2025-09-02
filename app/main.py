@@ -3,7 +3,13 @@
 
 
     app = create_app()
+    metrics = PrometheusMetrics(app)
 
+    # Custom metric
+    endpoint_counter = metrics.counter(
+        'custom_users_hits', 'Number of hits to /users endpoint'
+    )
+    
     @app.route("/")
     def home():
         return "Hello from Flask root route!"
