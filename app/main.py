@@ -1,9 +1,13 @@
-from app import create_app
+    from app import create_app
+    from prometheus_flask_exporter import PrometheusMetrics
 
-app = create_app()
 
-@app.route("/")
-def home():
-    return "Hello from Flask root route!"
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app = create_app()
+
+    @app.route("/")
+    def home():
+        return "Hello from Flask root route!"
+
+        
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000)
