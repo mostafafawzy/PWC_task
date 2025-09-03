@@ -1,8 +1,14 @@
 from app import create_app
+from prometheus_flask_exporter import PrometheusMetrics
+
 
 app = create_app()
+metrics = PrometheusMetrics(app)
 
-
+# Custom metric
+endpoint_counter = metrics.counter(
+    'custom_users_hits', 'Number of hits to /users endpoint'
+)
 
 @app.route("/")
 def home():
