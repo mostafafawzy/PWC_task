@@ -1,5 +1,4 @@
 # CI/CD Pipeline with GitHub Actions, Terraform, EKS, and Helm
-
 ---
 
 ## 🌐 Step 0: Provision AWS Infrastructure with Terraform
