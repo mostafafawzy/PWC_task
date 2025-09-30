@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-  namespace : zone-1
+  namespace: zone-1
   labels:
     app: nginx
 spec:
@@ -15,22 +15,17 @@ spec:
       labels:
         app: nginx
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                      - frontend
       containers:
         - name: nginx
           image: nginx:1.25
           ports:
             - containerPort: 80
-------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-clusterip
-  namespace : zone-1
-spec:
-  type: ClusterIP
-  selector:
-    app: nginx
-  ports:
-    - port: 80
-      targetPort: 80
-
